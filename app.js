@@ -22,6 +22,14 @@ app.post("/event", middlewareJson, middlewareUrlencoded, (req, res) => {
     return res.status(404).json({ msg: "error 404" });
 });
 
+app.post("/test", middlewareJson, middlewareUrlencoded ,(req, res) => {
+
+    io.emit("event", req.body.event);
+
+    return res.json(["hi"]);
+
+});
+
 server.listen(3000, () => {
     console.log("listening on http://localhost:3000");
 });
