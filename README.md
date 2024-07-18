@@ -1,4 +1,4 @@
-## Project Setup
+## Project Setup // socket io with laravel
 
 ```sh
 npm install
