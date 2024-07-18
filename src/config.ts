@@ -1,9 +1,10 @@
-import express from "express";
+import express, { Express, Response, Request } from 'express'
 import http from "http";
 import { Server } from "socket.io";
 
-export const app = express();
 
+
+export const app:Express = express();
 export const server = http.createServer(app);
 export  const io = new Server(server, {
     cors: {
@@ -11,3 +12,7 @@ export  const io = new Server(server, {
         methods: ["GET", "POST"]
     },
 });
+
+
+
+export const port:number = 3000
