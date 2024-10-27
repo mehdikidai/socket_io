@@ -14,7 +14,7 @@ const eventSchema = z.object({
 
 io.on('connection', (socket) => {
 
-	console.log('a user connected', socket.id);
+	console.log('a user connected', socket.id); // test git
 
 });
 
