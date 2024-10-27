@@ -1,56 +1,49 @@
-import { io, server, app, port } from "./config";
-import { middlewareJson, middlewareUrlencoded } from "./middlewares";
-import { Response, Request } from 'express'
+import { io, server, app, PORT } from './config';
+import { middlewareJson, middlewareUrlencoded } from './middlewares';
+import { Response, Request } from 'express';
+import { z } from 'zod';
+import { Event } from './types';
 
+
+const eventSchema = z.object({
+	event: z.string().regex(/^[a-zA-Z]+$/),
+	id: z.number().positive(),
+});
 
 // soket io connection ---
 
-io.on("connection", (socket) => {
+io.on('connection', (socket) => {
 
-    console.log("a user connected");
-
-    socket.on("add_comment", (data) => {
-        socket.broadcast.emit("res_add_comment", {
-            id: socket.id,
-        });
-    });
+	console.log('a user connected', socket.id);
 
 });
 
 // soket io connection ---
 
-
 // soket io event ---
 
-app.post("/event", middlewareJson, middlewareUrlencoded, (req: Request, res: Response) => {
+app.post('/event', middlewareJson, middlewareUrlencoded, (req: Request, res: Response) => {
 
-    const validated: boolean = /^[a-zA-Z]+$/.test(req.body.event);
+	const { event, id }: Event = req.body;
 
-    if (validated) {
+	const { success } = eventSchema.safeParse({ event, id });
 
-        console.log(req.body.event)
+	if (success) {
 
-        if (req.body.event === "newUrl") {
+		io.emit(event, Number(id));
 
-            io.emit("event", req.body.event);
-            
-        }
+		return res.status(200).json({ message: 'ok' });
+	}
 
-        
-
-        return res.json([req.body]);
-
-    }
-
-    return res.status(404).json({ msg: "error 404" });
-
+	return res.status(400).json({ message: 'error' });
 
 });
 
+
 // soket io event ---
 
-server.listen(port, () => {
+server.listen(PORT, () => {
 
-    console.log(`listening on http://localhost:${port}`);
+	console.log(`listening on http://localhost:${PORT}`);
 
 });
