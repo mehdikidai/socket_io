@@ -20,12 +20,12 @@ npm run build
 
 
 
-### build image
+### Build Image
 
 ```sh
 docker build -t io .
 ```
-### run container
+### Run Container
 
 ```sh
 docker run -p 127.0.0.1:3000:3000 --name socket_io_laravel io
