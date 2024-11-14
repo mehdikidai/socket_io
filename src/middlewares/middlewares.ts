@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
 import { Response, Request, NextFunction } from 'express';
+import { SOCKET_KEY } from '../configs/config';
 
 const middlewareJson = bodyParser.json();
 const middlewareUrlencoded = bodyParser.urlencoded({ extended: false });
@@ -9,13 +10,11 @@ const middlewareUrlencoded = bodyParser.urlencoded({ extended: false });
 
 function Auth(req: Request, res: Response, next: NextFunction) {
 	
+
 	const socketKey = req.headers['socket-key'];
 
-	if (socketKey !== process.env.SOCKET_KEY) {
-		return res.status(400).json({ message: 'error' });
-	}
+	return socketKey !== SOCKET_KEY ? res.status(400).json({ message: 'error' }) : next()
 
-	return next();
 }
 
 //------- end auth fn -----
