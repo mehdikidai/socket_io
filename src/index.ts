@@ -1,49 +1,32 @@
-import { io, server, app, PORT } from './config';
-import { middlewareJson, middlewareUrlencoded } from './middlewares';
-import { Response, Request } from 'express';
-import { z } from 'zod';
-import { Event } from './types';
-
-
-const eventSchema = z.object({
-	event: z.string().regex(/^[a-zA-Z]+$/),
-	id: z.number().positive(),
-});
+import { io, server, app, PORT } from './configs/config';
+import { middlewareJson, middlewareUrlencoded } from './middlewares/middlewares';
+import eventRouter from './router/event';
 
 // soket io connection ---
-
 io.on('connection', (socket) => {
 
-	console.log('a user connected', socket.id); // test git
+	const room = socket.handshake.query.room;
 
-});
-
-// soket io connection ---
-
-// soket io event ---
-
-app.post('/event', middlewareJson, middlewareUrlencoded, (req: Request, res: Response) => {
-
-	const { event, id }: Event = req.body;
-
-	const { success } = eventSchema.safeParse({ event, id });
-
-	if (success) {
-
-		io.emit(event, Number(id));
-
-		return res.status(200).json({ message: 'ok' });
+	if (room) {
+		socket.join(room);
+		console.log(`user room: ${room}`);
 	}
 
-	return res.status(400).json({ message: 'error' });
-
+	socket.on('disconnect', () => {
+		console.log(`user disconnected: ${room}`);
+		console.log(`---------------------------------------`);
+	});
+	
 });
 
+// middlewars --------
+app.use(middlewareJson);
+app.use(middlewareUrlencoded);
 
 // soket io event ---
+app.use('/event', eventRouter);
 
-server.listen(PORT, () => {
+// ------------------
 
-	console.log(`listening on http://localhost:${PORT}`);
-
-});
+// start server
+server.listen(PORT, () => console.log(`listening on http://localhost:${PORT}`));
