@@ -6,7 +6,7 @@ const middlewareJson = bodyParser.json();
 const middlewareUrlencoded = bodyParser.urlencoded({ extended: false });
 
 
-//-------- auth fn -----
+//-------- auth fn ------
 
 function Auth(req: Request, res: Response, next: NextFunction) {
 	
@@ -17,6 +17,6 @@ function Auth(req: Request, res: Response, next: NextFunction) {
 
 }
 
-//------- end auth fn -----
+//------- end auth fn ------
 
 export { middlewareJson, middlewareUrlencoded, Auth };
