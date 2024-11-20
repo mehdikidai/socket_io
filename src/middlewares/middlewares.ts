@@ -5,11 +5,9 @@ import { SOCKET_KEY } from '../configs/config';
 const middlewareJson = bodyParser.json();
 const middlewareUrlencoded = bodyParser.urlencoded({ extended: false });
 
-
 //-------- auth fn ------
 
 function Auth(req: Request, res: Response, next: NextFunction) {
-	
 
 	const socketKey = req.headers['socket-key'];
 
