@@ -2,7 +2,7 @@ import { io, server, app, PORT } from './configs/config';
 import { middlewareJson, middlewareUrlencoded } from './middlewares/middlewares';
 import eventRouter from './router/event';
 
-// soket io connection ---
+// socket io connection ---
 io.on('connection', (socket) => {
 
 	const room = socket.handshake.query.room;
@@ -19,11 +19,11 @@ io.on('connection', (socket) => {
 	
 });
 
-// middlewars --------
+// middlewares --------
 app.use(middlewareJson);
 app.use(middlewareUrlencoded);
 
-// soket io event ---
+// socket io event ---
 app.use('/event', eventRouter);
 
 // ------------------

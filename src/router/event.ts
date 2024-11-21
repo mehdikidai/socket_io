@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { Auth } from '../middlewares/middlewares';
-import { eventCobtroller } from '../controllers/eventCobtroller';
+import { eventController } from '../controllers/eventController';
 
 const eventRouter = Router();
 
 //-------------------------------------------------------------
 
-eventRouter.post('/', Auth, eventCobtroller);
+eventRouter.post('/', Auth, eventController);
 
 //-------------------------------------------------------------
 
